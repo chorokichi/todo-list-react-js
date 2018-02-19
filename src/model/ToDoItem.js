@@ -1,7 +1,7 @@
 class ToDoItem {
-    constructor(value, date) {
+    constructor(value, createdOn) {
         this.value = value;
-        this.date = date;
+        this.createdOn = createdOn;
     }
 }
 

@@ -10,7 +10,7 @@ class ToDoListTable extends Component {
         console.log(items);
         const listItems = items.map((item) =>
             <li key={item.value}>
-                {item.value + "(" + item.date + ")"}
+                {item.value + "(" + item.createdOn + ")"}
             </li>
         );
         return (
