@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import NewItemForm from './NewItemForm';
 import ToDoListTable from './ToDoListTable';
 import ToDoItem from 'model/ToDoItem';
+import SimpleDialog from 'util/SimpleDialog';
 
 import './ToDoListApp.css';
 
@@ -9,6 +10,11 @@ class ToDoListApp extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            resultDialog: {
+                open: false,
+                title: "",
+                message: ""
+            },
             textFieldValue: "",
             values: [] // [ToDoItem]
         };
@@ -24,6 +30,24 @@ class ToDoListApp extends Component {
         });
     }
 
+    openDialog(title, msg) {
+        this.setState({
+            resultDialog: {
+                open: true,
+                title: title,
+                message: msg
+            }
+        })
+    }
+
+    closeDialog() {
+        this.setState({
+            resultDialog: {
+                open: false
+            }
+        })
+    }
+
     onSubmit() {
         const val = this.state.textFieldValue.trim();
         if (val === "") {
@@ -34,19 +58,19 @@ class ToDoListApp extends Component {
         {
             const msg = "「" + val + "」を保存しました";
             console.log(msg)
-            alert(msg);
+            this.openDialog("結果", msg)
         }
 
         const item = new ToDoItem(val, Date());
 
         let items = this.state.values;
-        {
+        (() => {
             console.log("追加前：");
             console.log(items);
             items.unshift(item);
             console.log("追加後：");
             console.log(items)
-        }
+        })();
         this.setState({
             textFieldValue: "",
             values: items
@@ -69,7 +93,21 @@ class ToDoListApp extends Component {
                 <ToDoListTable
                     items={this.state.values}
                 />
-            </div>
+
+                <SimpleDialog
+                    title={this.state.resultDialog.title}
+                    message={this.state.resultDialog.message}
+                    open={this.state.resultDialog.open}
+                    onClickOK={() => {
+                        console.log("OK!")
+                        this.closeDialog();
+                    }}
+                    onClickCancel={() => {
+                        console.log("Cancel!");
+                        this.closeDialog();
+                    }}
+                />
+            </div >
         );
     }
 

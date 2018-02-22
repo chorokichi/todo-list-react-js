@@ -1,4 +1,12 @@
 import React, { Component } from 'react';
+// import {
+//     Table,
+//     TableBody,
+//     TableHeader,
+//     TableHeaderColumn,
+//     TableRow,
+//     TableRowColumn,
+// } from 'material-ui/Table';
 
 class ToDoListTable extends Component {
     // constructor(props) {
@@ -14,7 +22,9 @@ class ToDoListTable extends Component {
             </li>
         );
         return (
-            <ul>{listItems}</ul>
+            <div>
+                <ul>{listItems}</ul>
+            </div>
         );
     }
 }

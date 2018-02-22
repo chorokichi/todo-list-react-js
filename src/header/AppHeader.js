@@ -5,6 +5,7 @@ import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
+import FlatButton from 'material-ui/FlatButton';
 
 class AppHeader extends Component {
     constructor() {
@@ -15,21 +16,42 @@ class AppHeader extends Component {
         };
     }
 
+    componentDidMount() {
+        // this.timerID = setInterval(
+        //     () => this.tick(),
+        //     1000
+        // );
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerID);
+    }
+
     chnageDrawerOpenStatus() {
         this.setState({ open: !this.state.open })
     }
 
+    tick() {
+        this.setState({
+            now: new Date()
+        });
+    }
+
+    getYYYYMMDD() {
+        const today = this.state.now;
+        return today.getFullYear() + "/"
+            + (today.getMonth() + 1)
+            + "/" + today.getDate()
+            + " " + today.getHours()
+            + ":" + today.getMinutes()
+            + " " + today.getSeconds();
+    }
+
     render() {
         return (
-            // <header className="App-header">
-            //     <img src={logo} className="App-logo" alt="logo" />
-            //     <h1 className="App-title">To Do List</h1>
-            // </header>
-            // <MuiThemeProvider>
             <div>
                 <AppBar
-                    title="Title"
-                    iconClassNameRight="muidocs-icon-navigation-expand-more"
+                    title="Reactive To Doリスト"
                     onTitleClick={(event) => {
                         console.log("onTitleClick")
                     }}
@@ -37,10 +59,11 @@ class AppHeader extends Component {
                         console.log("onLeftIconButtonClick")
                         this.chnageDrawerOpenStatus();
                     }}
+                    iconElementRight={<FlatButton label={this.getYYYYMMDD()} />}
                     iconElementLeft={<img src={logo} className="App-logo" alt="logo" />}
                 >
-
                 </AppBar>
+
                 <Drawer open={this.state.open}>
                     <Menu onItemClick={(event, menuItem, index) => {
                         console.log("On Item Click!");
@@ -50,7 +73,7 @@ class AppHeader extends Component {
                         this.chnageDrawerOpenStatus();
                     }}>
                         <MenuItem>
-                            {"" + Date.now()}
+                            {this.getYYYYMMDD()}
                         </MenuItem>
                         <MenuItem>
                             <a href="https://reactjs.org/docs/hello-world.html"
@@ -71,7 +94,7 @@ class AppHeader extends Component {
                         </MenuItem>
                     </Menu>
                 </Drawer>
-            </div>
+            </div >
 
             // </MuiThemeProvider>
         );
