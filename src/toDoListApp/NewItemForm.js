@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
 import './NewItemForm.css';
 
 /** 
@@ -12,18 +14,41 @@ class NewItemForm extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
+
+        this.state = {
+            disabled: true
+        }
+    }
+
+    submit() {
+        // 保存する処理は上
+        if (this.props.onSubmit()) {
+            this.setState({
+                disabled: true
+            })
+        };
     }
 
     handleClick() {
         console.log("Click")
-
-        // 保存する処理は上
-        this.props.onSubmit();
+        this.submit();
     }
 
     handleChange(event) {
         let value = event.target.value;
         console.log("onChange - " + value)
+
+        const val = value.trim();
+
+        // 空でなければサブミットボタンを有効にする
+        {
+            const disabled = (val === "")
+            console.log("disabled: " + disabled);
+            this.setState({
+                disabled: disabled
+            })
+        }
+
         this.props.onTextChange(value);
     }
 
@@ -31,23 +56,36 @@ class NewItemForm extends Component {
         const ENTER = 13 // Enter Key Code
         console.log("event: " + event.which);
         if (ENTER === event.which) {
-            this.props.onEnter();
+            this.submit();
         }
     }
 
     render() {
+        console.log("NewItemForm is rendering...")
         return (
             <div className="NewItemForm">
-                <input
-                    className="TextComp" type="text"
+                <TextField
+                    style={{ width: "80%" }}
+                    floatingLabelText="タスク"
+                    floatingLabelFixed
+                    className="TextComp"
+                    // fullWidth
                     value={this.props.value}
+                    hintText="新しいタスクの登録..."
                     onChange={this.handleChange}
-                    onKeyPress={this.handleKeyPress} />
-                <button
+                    onKeyPress={this.handleKeyPress}
+
+                />
+
+                <FlatButton
+                    style={{ width: "50" }}
                     className="ButtonComp"
-                    onClick={this.handleClick}>
-                    追加
-                    </button>
+                    label="追加"
+                    disabled={this.state.disabled}
+                    onClick={this.handleClick} />
+
+
+
             </div>
         );
     }

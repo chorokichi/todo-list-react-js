@@ -5,22 +5,17 @@ import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-import FlatButton from 'material-ui/FlatButton';
-
+import DateCounter from 'util/DateCounter';
 class AppHeader extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            open: false,
-            now: new Date()
+            open: false
         };
     }
 
     componentDidMount() {
-        // this.timerID = setInterval(
-        //     () => this.tick(),
-        //     1000
-        // );
+        console.log("AppHeader componentDidMount")
     }
 
     componentWillUnmount() {
@@ -31,23 +26,10 @@ class AppHeader extends Component {
         this.setState({ open: !this.state.open })
     }
 
-    tick() {
-        this.setState({
-            now: new Date()
-        });
-    }
 
-    getYYYYMMDD() {
-        const today = this.state.now;
-        return today.getFullYear() + "/"
-            + (today.getMonth() + 1)
-            + "/" + today.getDate()
-            + " " + today.getHours()
-            + ":" + today.getMinutes()
-            + " " + today.getSeconds();
-    }
 
     render() {
+        console.log("AppHeader is rendering...")
         return (
             <div>
                 <AppBar
@@ -59,7 +41,7 @@ class AppHeader extends Component {
                         console.log("onLeftIconButtonClick")
                         this.chnageDrawerOpenStatus();
                     }}
-                    iconElementRight={<FlatButton label={this.getYYYYMMDD()} />}
+                    iconElementRight={<DateCounter />}
                     iconElementLeft={<img src={logo} className="App-logo" alt="logo" />}
                 >
                 </AppBar>
@@ -73,7 +55,7 @@ class AppHeader extends Component {
                         this.chnageDrawerOpenStatus();
                     }}>
                         <MenuItem>
-                            {this.getYYYYMMDD()}
+                            {<DateCounter />}
                         </MenuItem>
                         <MenuItem>
                             <a href="https://reactjs.org/docs/hello-world.html"
@@ -95,8 +77,6 @@ class AppHeader extends Component {
                     </Menu>
                 </Drawer>
             </div >
-
-            // </MuiThemeProvider>
         );
     }
 }

@@ -6,6 +6,8 @@ import SimpleDialog from 'util/SimpleDialog';
 
 import './ToDoListApp.css';
 
+let count = 0;
+
 class ToDoListApp extends Component {
     constructor(props) {
         super(props);
@@ -16,13 +18,21 @@ class ToDoListApp extends Component {
                 message: ""
             },
             textFieldValue: "",
-            values: [] // [ToDoItem]
+            values: [
+                new ToDoItem(count++, "test01", new Date()),
+                new ToDoItem(count++, "test02", new Date())] // [ToDoItem]
         };
         this.onUpdateTextBox = this.onUpdateTextBox.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.onEnter = this.onEnter.bind(this);
     }
 
+    componentDidMount() {
+
+    }
+
+    componentWillUnmount() {
+
+    }
     onUpdateTextBox(value) {
         console.log("test - " + value)
         this.setState({
@@ -52,7 +62,7 @@ class ToDoListApp extends Component {
         const val = this.state.textFieldValue.trim();
         if (val === "") {
             alert("未入力です。");
-            return;
+            return false;
         }
 
         {
@@ -61,7 +71,7 @@ class ToDoListApp extends Component {
             this.openDialog("結果", msg)
         }
 
-        const item = new ToDoItem(val, Date());
+        const item = new ToDoItem(count++, val, new Date());
 
         let items = this.state.values;
         (() => {
@@ -75,21 +85,20 @@ class ToDoListApp extends Component {
             textFieldValue: "",
             values: items
         })
-    }
 
-    onEnter() {
-        this.onSubmit();
+        return true;
     }
 
     render() {
+        console.log("ToDoListApp is rendering...")
         return (
             <div className="ToDoListApp">
                 <NewItemForm
                     value={this.state.textFieldValue}
                     onTextChange={this.onUpdateTextBox}
                     onSubmit={this.onSubmit}
-                    onEnter={this.onEnter}
                 />
+
                 <ToDoListTable
                     items={this.state.values}
                 />
