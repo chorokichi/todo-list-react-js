@@ -7,37 +7,62 @@ import {
     TableRow,
     TableRowColumn,
 } from 'material-ui/Table';
-
+import FlatButton from 'material-ui/FlatButton';
+import { Card, CardHeader } from 'material-ui/Card' // テーブルがボードの上に載っているように表示するために利用
 import DateUtil from 'util/DateUtil';
 
 
 /** selected */
 class ToDoListTable extends Component {
-    // constructor(props) {
-    //     super(props);
-    // }
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedNum: 0
+        }
+        this.onRowSelection = this.onRowSelection.bind(this);
+        this.handleClickBuldDeleteButton = this.handleClickBuldDeleteButton.bind(this);
+    }
+
+    onRowSelection(selectedRows) {
+        console.log("Click - onRowSelection:");
+        console.log(selectedRows);
+        console.log(selectedRows.length);
+        // ここでstateを変えるとテーブル全体の再描画が開始してチェックが強制的にはずれる...
+        this.setState({
+            selectedNum: selectedRows.length
+        });
+    }
+    handleClickBuldDeleteButton() {
+        console.log("Click - BuldDeleteButton:" + this.state.selectedNum)
+    }
 
     render() {
         console.log("ToDoListTable is rendering...")
         const items = this.props.items;
         console.log(items);
-        const TableExampleSimple = () => (
+        const WholeTable = () => (
             <Table
+                fixedHeader={false}
+                style={{ tableLayout: 'auto' }}
                 height="400"        // テーブルの高さ
                 multiSelectable     // 複数選択を許容
-                fixedHeader         // ヘッダーを固定
                 fixedFooter         // フッターを固定
+                onRowSelection={this.onRowSelection}
             >
                 <TableHeader>
                     <TableRow>
-                        <TableHeaderColumn colSpan="3" tooltip="Super Header" style={{ textAlign: 'left' }}>
-                            Super Header
+                        <TableHeaderColumn colSpan="3" tooltip="Super Header" style={{ textAlign: 'right' }}>
+                            <FlatButton
+                                label="一括削除"
+                                disabled={this.state.selectedNum === 0}
+                                onClick={this.handleClickBuldDeleteButton}
+                            />
                         </TableHeaderColumn>
                     </TableRow>
                     <TableRow>
-                        <TableHeaderColumn>ID</TableHeaderColumn>
-                        <TableHeaderColumn>Name</TableHeaderColumn>
-                        <TableHeaderColumn>Created</TableHeaderColumn>
+                        <TableHeaderColumn style={{ width: "10%" }}>ID</TableHeaderColumn>
+                        <TableHeaderColumn style={{ width: "50%" }}> Name</TableHeaderColumn>
+                        <TableHeaderColumn style={{ width: "40%" }}> Created</TableHeaderColumn>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -55,7 +80,10 @@ class ToDoListTable extends Component {
 
         return (
             <div>
-                <TableExampleSimple />
+                <Card>
+                    <CardHeader title="登録済みのタスクリスト" />
+                    <WholeTable />
+                </Card>
             </div>
         );
     }
