@@ -11,9 +11,13 @@
     "react-tap-event-plugin": "^3.0.2"
   },
   "scripts": {
+    "flow": "flow",
     "start": "NODE_PATH=src/ react-scripts start",
     "build": "NODE_PATH=src/ react-scripts build",
     "test": "NODE_PATH=src/ react-scripts test --env=jsdom",
     "eject": "NODE_PATH=src/ react-scripts eject"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.66.0"
   }
 }
