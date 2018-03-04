@@ -2,5 +2,7 @@
     //  ローカルプロジェクト(プロジェクトフォルダ/node_modules/)にインストールしているflowを使用するフラグ
     "flow.useNPMPackagedFlow": true,
     // JavaScriptのバリデートをオフにする(JavaScriptの記述とは違うためflowのコードチェックと重複するため）
-    "javascript.validate.enable": false
+    "javascript.validate.enable": false,
+    // 全ファイルでFlowを有効化(無効化している場合は//@Flowを含むファイルのみ)
+    "flow.runOnAllFiles": false,
 }
