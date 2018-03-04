@@ -1,0 +1,6 @@
+{
+    //  ローカルプロジェクト(プロジェクトフォルダ/node_modules/)にインストールしているflowを使用するフラグ
+    "flow.useNPMPackagedFlow": true,
+    // JavaScriptのバリデートをオフにする(JavaScriptの記述とは違うためflowのコードチェックと重複するため）
+    "javascript.validate.enable": false
+}
