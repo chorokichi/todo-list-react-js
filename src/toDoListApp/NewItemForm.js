@@ -1,6 +1,7 @@
 // @flow
 
 import * as React from 'react';
+import { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import './NewItemForm.css';
@@ -20,7 +21,7 @@ type State = {
  * 新規のItemを追加するUIコンポーネント
  * ## 状態を持たないコンポーネント(propsで受け取ったデータを活用している)
 */
-class NewItemForm extends React.Component<Props, State> {
+class NewItemForm extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
@@ -88,27 +89,15 @@ class NewItemForm extends React.Component<Props, State> {
                     hintText="新しいタスクの登録..."
                     onChange={this.handleChange}
                     onKeyPress={this.handleKeyPress}
-
                 />
-
                 <FlatButton
                     style={{ width: "50" }}
                     className="ButtonComp"
                     label="追加"
                     disabled={this.state.disabled}
                     onClick={this.handleClick} />
-
-
-
             </div>
         );
     }
 }
-
-// NewItemForm.propTypes = {
-//     value: PropTypes.string.isRequired,
-//     onTextChange: PropTypes.func.isRequired,
-//     onSubmit: PropTypes.func.isRequired
-// };
-
 export default NewItemForm;
