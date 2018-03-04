@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
+import { Card, CardHeader, CardText } from 'material-ui/Card';
 import './NewItemForm.css';
 
 
@@ -14,7 +15,8 @@ type Props = {
 };
 
 type State = {
-    disabled: bool
+    disabled: bool,
+    headerExpanded: bool
 };
 
 /** 
@@ -30,7 +32,8 @@ class NewItemForm extends Component<Props, State> {
         (this: any).handleKeyPress = this.handleKeyPress.bind(this);
 
         this.state = {
-            disabled: true
+            disabled: true,
+            headerExpanded: true
         }
     }
 
@@ -78,25 +81,37 @@ class NewItemForm extends Component<Props, State> {
     render() {
         console.log("NewItemForm is rendering...")
         return (
-            <div className="NewItemForm">
-                <TextField
-                    style={{ width: "80%" }}
-                    floatingLabelText="タスク"
-                    floatingLabelFixed
-                    className="TextComp"
-                    // fullWidth
-                    value={this.props.value}
-                    hintText="新しいタスクの登録..."
-                    onChange={this.handleChange}
-                    onKeyPress={this.handleKeyPress}
+            <Card className="NewItemForm" expanded={this.state.headerExpanded}
+                onExpandChange={(newExpandedState: boolean) => {
+                    this.setState({
+                        headerExpanded: newExpandedState
+                    });
+                }}>
+                <CardHeader
+                    title="タスク"
+                    actAsExpander={true}
+                    showExpandableButton={true}
                 />
-                <FlatButton
-                    style={{ width: "50" }}
-                    className="ButtonComp"
-                    label="追加"
-                    disabled={this.state.disabled}
-                    onClick={this.handleClick} />
-            </div>
+                <CardText expandable={true}>
+                    <TextField
+                        style={{ width: "80%" }}
+                        // floatingLabelText="タスク"
+                        // floatingLabelFixed
+                        className="TextComp"
+                        // fullWidth
+                        value={this.props.value}
+                        hintText="新しいタスクの登録..."
+                        onChange={this.handleChange}
+                        onKeyPress={this.handleKeyPress}
+                    />
+                    <FlatButton
+                        style={{ width: "50" }}
+                        className="ButtonComp"
+                        label="追加"
+                        disabled={this.state.disabled}
+                        onClick={this.handleClick} />
+                </CardText>
+            </Card>
         );
     }
 }
