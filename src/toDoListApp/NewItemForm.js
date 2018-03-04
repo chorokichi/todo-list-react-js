@@ -1,19 +1,32 @@
-import React, { Component } from 'react';
+// @flow
+
+import * as React from 'react';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import './NewItemForm.css';
+
+
+type Props = {
+    value: string,
+    onTextChange: (string) => void,
+    onSubmit: () => bool
+};
+
+type State = {
+    disabled: bool
+};
 
 /** 
  * 新規のItemを追加するUIコンポーネント
  * ## 状態を持たないコンポーネント(propsで受け取ったデータを活用している)
 */
-class NewItemForm extends Component {
+class NewItemForm extends React.Component<Props, State> {
 
-    constructor(props) {
+    constructor(props: Props) {
         super(props);
-        this.handleClick = this.handleClick.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleKeyPress = this.handleKeyPress.bind(this);
+        (this: any).handleClick = this.handleClick.bind(this);
+        (this: any).handleChange = this.handleChange.bind(this);
+        (this: any).handleKeyPress = this.handleKeyPress.bind(this);
 
         this.state = {
             disabled: true
@@ -34,8 +47,8 @@ class NewItemForm extends Component {
         this.submit();
     }
 
-    handleChange(event) {
-        let value = event.target.value;
+    handleChange(event: SyntheticEvent<HTMLInputElement>) {
+        let value = (event.currentTarget: HTMLInputElement).value;
         console.log("onChange - " + value)
 
         const val = value.trim();
@@ -43,7 +56,7 @@ class NewItemForm extends Component {
         // 空でなければサブミットボタンを有効にする
         {
             const disabled = (val === "")
-            console.log("disabled: " + disabled);
+            console.log("disabled: " + String(disabled));
             this.setState({
                 disabled: disabled
             })
@@ -52,10 +65,11 @@ class NewItemForm extends Component {
         this.props.onTextChange(value);
     }
 
-    handleKeyPress(event) {
+    handleKeyPress(event: SyntheticKeyboardEvent<HTMLInputElement>) {
         const ENTER = 13 // Enter Key Code
-        console.log("event: " + event.which);
-        if (ENTER === event.which) {
+        const keyNum = event.which;
+        console.log("event: " + keyNum);
+        if (ENTER === keyNum) {
             this.submit();
         }
     }
@@ -91,5 +105,10 @@ class NewItemForm extends Component {
     }
 }
 
+// NewItemForm.propTypes = {
+//     value: PropTypes.string.isRequired,
+//     onTextChange: PropTypes.func.isRequired,
+//     onSubmit: PropTypes.func.isRequired
+// };
 
 export default NewItemForm;
