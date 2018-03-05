@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+//@flow
+import * as React from 'react';
+import { Component } from 'react';
 import AppHeader from './header/AppHeader';
 import ToDoListApp from './toDoListApp/ToDoListApp';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import './App.css';
-class App extends Component {
+class App extends Component<{}> {
 
   render() {
     return (
