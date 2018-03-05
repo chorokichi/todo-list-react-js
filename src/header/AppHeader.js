@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+// @flow
+import * as React from 'react';
+import { Component } from 'react';
 import logo from './logo.svg';
 import './AppHeader.css';
 import AppBar from 'material-ui/AppBar';
@@ -7,8 +9,17 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import DateCounter from 'util/DateCounter';
 
-class AppHeader extends Component {
-    constructor(props) {
+
+type Props = {
+};
+
+type State = {
+    open: bool,
+};
+
+
+class AppHeader extends Component<Props, State> {
+    constructor(props: Props) {
         super(props);
         this.state = {
             open: false
@@ -20,7 +31,7 @@ class AppHeader extends Component {
     }
 
     componentWillUnmount() {
-        clearInterval(this.timerID);
+        console.log("AppHeader componentWillUnmount")
     }
 
     chnageDrawerOpenStatus() {
