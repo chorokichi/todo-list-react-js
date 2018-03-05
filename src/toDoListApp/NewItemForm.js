@@ -1,12 +1,10 @@
 // @flow
-
 import * as React from 'react';
 import { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import './NewItemForm.css';
-
 
 type Props = {
     value: string,
