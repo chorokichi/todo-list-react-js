@@ -1,4 +1,8 @@
-import React, { Component } from 'react';
+//@flow
+
+
+import * as React from 'react';
+import { Component } from 'react';
 import {
     Table,
     TableBody,
@@ -10,20 +14,29 @@ import {
 import FlatButton from 'material-ui/FlatButton';
 import { Card, CardHeader } from 'material-ui/Card' // テーブルがボードの上に載っているように表示するために利用
 import DateUtil from 'util/DateUtil';
+import ToDoItem from 'model/ToDoItem';
 
+
+type Props = {
+    items: ToDoItem[]
+};
+
+type State = {
+    selectedNum: number,
+};
 
 /** selected */
-class ToDoListTable extends Component {
-    constructor(props) {
+class ToDoListTable extends Component<Props, State> {
+    constructor(props: Props) {
         super(props);
         this.state = {
             selectedNum: 0
-        }
-        this.onRowSelection = this.onRowSelection.bind(this);
-        this.handleClickBuldDeleteButton = this.handleClickBuldDeleteButton.bind(this);
+        };
+        (this: any).onRowSelection = this.onRowSelection.bind(this);
+        (this: any).handleClickBuldDeleteButton = this.handleClickBuldDeleteButton.bind(this);
     }
 
-    onRowSelection(selectedRows) {
+    onRowSelection(selectedRows: number[]) {
         console.log("Click - onRowSelection:");
         console.log(selectedRows);
         console.log(selectedRows.length);

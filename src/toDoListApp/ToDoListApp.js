@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+//@flow
+import * as React from 'react';
+import { Component } from 'react';
 import NewItemForm from './NewItemForm';
 import ToDoListTable from './ToDoListTable';
 import ToDoItem from 'model/ToDoItem';
@@ -8,8 +10,18 @@ import './ToDoListApp.css';
 
 let count = 0;
 
-class ToDoListApp extends Component {
-    constructor(props) {
+
+type Props = {
+};
+
+type State = {
+    resultDialog: { open: bool, title: string, message: string },
+    textFieldValue: string,
+    values: ToDoItem[]
+};
+
+class ToDoListApp extends Component<Props, State> {
+    constructor(props: Props) {
         super(props);
         this.state = {
             resultDialog: {
@@ -19,11 +31,11 @@ class ToDoListApp extends Component {
             },
             textFieldValue: "",
             values: [
-                new ToDoItem(count++, "test01", new Date()),
-                new ToDoItem(count++, "test02", new Date())] // [ToDoItem]
+                new ToDoItem(String(count++), "test01", new Date()),
+                new ToDoItem(String(count++), "test02", new Date())] // [ToDoItem]
         };
-        this.onUpdateTextBox = this.onUpdateTextBox.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+        (this: any).onUpdateTextBox = this.onUpdateTextBox.bind(this);
+        (this: any).onSubmit = this.onSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -33,14 +45,15 @@ class ToDoListApp extends Component {
     componentWillUnmount() {
 
     }
-    onUpdateTextBox(value) {
+
+    onUpdateTextBox(value: string) {
         console.log("test - " + value)
         this.setState({
             textFieldValue: value
         });
     }
 
-    openDialog(title, msg) {
+    openDialog(title: string, msg: string) {
         this.setState({
             resultDialog: {
                 open: true,
@@ -53,7 +66,7 @@ class ToDoListApp extends Component {
     closeDialog() {
         this.setState({
             resultDialog: {
-                open: false
+                open: false, title: "", message: ""
             }
         })
     }
@@ -71,7 +84,7 @@ class ToDoListApp extends Component {
             this.openDialog("結果", msg)
         }
 
-        const item = new ToDoItem(count++, val, new Date());
+        const item = new ToDoItem(String(count++), val, new Date());
 
         let items = this.state.values;
         (() => {
