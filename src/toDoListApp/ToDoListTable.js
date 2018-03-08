@@ -73,7 +73,7 @@ class ToDoListTable extends PureComponent<Props, State> {
                         </TableHeaderColumn>
                     </TableRow>
                     <TableRow>
-                        <TableHeaderColumn style={{ width: "10%" }}>ID</TableHeaderColumn>
+                        {/* <TableHeaderColumn style={{ width: "10%" }}>ID</TableHeaderColumn> */}
                         <TableHeaderColumn style={{ width: "50%" }}> Name</TableHeaderColumn>
                         <TableHeaderColumn style={{ width: "40%" }}> Created</TableHeaderColumn>
                     </TableRow>
@@ -82,7 +82,7 @@ class ToDoListTable extends PureComponent<Props, State> {
                     {items.map((item) =>
                         <TableRow
                             key={item.id}>
-                            <TableRowColumn>{item.id}</TableRowColumn>
+                            {/* <TableRowColumn>{item.id}</TableRowColumn> */}
                             <TableRowColumn>{item.value}</TableRowColumn>
                             <TableRowColumn>{DateUtil.getLongDate(item.createdOn)}</TableRowColumn>
                         </TableRow>
