@@ -18,7 +18,8 @@ import ToDoItem from 'model/ToDoItem';
 
 
 type Props = {
-    items: ToDoItem[]
+    items: ToDoItem[],
+    updateSelectedStatus: (selectedRows: number[]) => void
 };
 
 type State = {
@@ -40,7 +41,8 @@ class ToDoListTable extends PureComponent<Props, State> {
         console.log("Click - onRowSelection:");
         console.log(selectedRows);
         console.log(selectedRows.length);
-        // ここでstateを変えるとテーブル全体の再描画が開始してチェックが強制的にはずれる...
+
+        this.props.updateSelectedStatus(selectedRows);
         this.setState({
             selectedNum: selectedRows.length
         });
@@ -81,7 +83,9 @@ class ToDoListTable extends PureComponent<Props, State> {
                 <TableBody>
                     {items.map((item) =>
                         <TableRow
-                            key={item.id}>
+                            key={item.id}
+                            selected={item.selected}
+                        >
                             {/* <TableRowColumn>{item.id}</TableRowColumn> */}
                             <TableRowColumn>{item.value}</TableRowColumn>
                             <TableRowColumn>{DateUtil.getLongDate(item.createdOn)}</TableRowColumn>

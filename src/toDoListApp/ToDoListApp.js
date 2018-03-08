@@ -47,6 +47,7 @@ class ToDoListApp extends Component<Props, State> {
         };
         (this: any).onUpdateTextBox = this.onUpdateTextBox.bind(this);
         (this: any).onSubmit = this.onSubmit.bind(this);
+        (this: any).updateSelectedStatus = this.updateSelectedStatus.bind(this);
     }
 
     componentDidMount() {
@@ -103,12 +104,29 @@ class ToDoListApp extends Component<Props, State> {
             textFieldValue: "",
             values: newItems
         })
-        // this.setState((prevState: State) => ({
-        //     textFieldValue: "",
-        //     values: [...prevState.values, item],
-        // }))
 
         return true;
+    }
+
+    updateSelectedStatus(selectedRows: number[]) {
+        let newItems: ToDoItem[] = [];
+        for (var i = 0; i < this.state.values.length; i++) {
+            console.log("i: " + i)
+            let item = this.state.values[i];
+            if (selectedRows.includes(i)) {
+                item.selected = true
+                newItems.push(item);
+            } else {
+                item.selected = false
+                newItems.push(item);
+            }
+        }
+        console.log("newItems")
+        console.log(newItems)
+        // ここでstateを変えるとテーブル全体の再描画が開始してチェックが強制的にはずれる...
+        this.setState({
+            values: newItems
+        })
     }
 
     render() {
@@ -123,6 +141,7 @@ class ToDoListApp extends Component<Props, State> {
 
                 <ToDoListTable
                     items={this.state.values}
+                    updateSelectedStatus={this.updateSelectedStatus}
                 />
 
                 <SimpleDialog
