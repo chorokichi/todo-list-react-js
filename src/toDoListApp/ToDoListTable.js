@@ -2,7 +2,7 @@
 
 
 import * as React from 'react';
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import {
     Table,
     TableBody,
@@ -26,7 +26,7 @@ type State = {
 };
 
 /** selected */
-class ToDoListTable extends Component<Props, State> {
+class ToDoListTable extends PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {

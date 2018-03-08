@@ -8,8 +8,10 @@ import SimpleDialog from 'util/SimpleDialog';
 
 import './ToDoListApp.css';
 
-let count = 0;
-
+let count = 1;
+const outputId = (): string => {
+    return String(('0000' + count++).slice(-4));
+}
 
 type Props = {
 };
@@ -23,6 +25,17 @@ type State = {
 class ToDoListApp extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
+        const values = [
+            new ToDoItem(outputId(), "test01", new Date()),
+            new ToDoItem(outputId(), "test02", new Date())
+        ]
+
+        values.sort((a: ToDoItem, b: ToDoItem): number => {
+            if (a.id < b.id) return 1;
+            if (a.id > b.id) return -1;
+            return 0;
+        })
+
         this.state = {
             resultDialog: {
                 open: false,
@@ -30,9 +43,7 @@ class ToDoListApp extends Component<Props, State> {
                 message: ""
             },
             textFieldValue: "",
-            values: [
-                new ToDoItem(String(count++), "test01", new Date()),
-                new ToDoItem(String(count++), "test02", new Date())] // [ToDoItem]
+            values: values
         };
         (this: any).onUpdateTextBox = this.onUpdateTextBox.bind(this);
         (this: any).onSubmit = this.onSubmit.bind(this);
@@ -84,20 +95,18 @@ class ToDoListApp extends Component<Props, State> {
             this.openDialog("結果", msg)
         }
 
-        const item = new ToDoItem(String(count++), val, new Date());
+        const item = new ToDoItem(outputId(), val, new Date());
 
-        let items = this.state.values;
-        (() => {
-            console.log("追加前：");
-            console.log(items);
-            items.unshift(item);
-            console.log("追加後：");
-            console.log(items)
-        })();
+        // ToDoListTableがPureComponentのため、その中で利用するvaluesが別のオブジェクトになるように工夫している
+        const newItems = [item, ...this.state.values]
         this.setState({
             textFieldValue: "",
-            values: items
+            values: newItems
         })
+        // this.setState((prevState: State) => ({
+        //     textFieldValue: "",
+        //     values: [...prevState.values, item],
+        // }))
 
         return true;
     }
