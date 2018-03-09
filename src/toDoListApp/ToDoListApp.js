@@ -110,17 +110,26 @@ class ToDoListApp extends Component<Props, State> {
 
     updateSelectedStatus(selectedRows: number[]) {
         let newItems: ToDoItem[] = [];
-        for (var i = 0; i < this.state.values.length; i++) {
-            console.log("i: " + i)
-            let item = this.state.values[i];
-            if (selectedRows.includes(i)) {
-                item.selected = true
-                newItems.push(item);
-            } else {
-                item.selected = false
-                newItems.push(item);
+
+        if (selectedRows === "all") {
+            this.state.values.forEach((element: ToDoItem, index: number) => {
+                element.selected = true
+                newItems.push(element)
+            })
+        } else {
+            for (var i = 0; i < this.state.values.length; i++) {
+                console.log("i: " + i)
+                let item = this.state.values[i];
+                if (selectedRows.includes(i)) {
+                    item.selected = true
+                    newItems.push(item);
+                } else {
+                    item.selected = false
+                    newItems.push(item);
+                }
             }
         }
+
         console.log("newItems")
         console.log(newItems)
         // ここでstateを変えるとテーブル全体の再描画が開始してチェックが強制的にはずれる...
