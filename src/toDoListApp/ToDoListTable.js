@@ -19,7 +19,7 @@ import TaskItem from 'model/TaskItem';
 
 type Props = {
     items: TaskItem[],
-    updateSelectedStatus: (selectedRows: number[]) => void
+    updateSelectedStatus: (selectedRows: number[] | 'all') => void
 };
 
 type State = {
@@ -37,7 +37,7 @@ class ToDoListTable extends PureComponent<Props, State> {
         (this: any).handleClickBuldDeleteButton = this.handleClickBuldDeleteButton.bind(this);
     }
 
-    onRowSelection(selectedRows: number[]) {
+    onRowSelection(selectedRows: number[] | 'all') {
         console.log("Click - onRowSelection:");
         console.log(selectedRows);
         console.log(selectedRows.length);
@@ -60,7 +60,7 @@ class ToDoListTable extends PureComponent<Props, State> {
                 fixedHeader={false}
                 style={{ tableLayout: 'auto' }}
                 height="400"        // テーブルの高さ
-                multiSelectable     // 複数選択を許容
+                // multiSelectable     // 複数選択を許容(チェックボックスは完了を意味するので一括選択はサポート対象外としている)
                 fixedFooter         // フッターを固定
                 onRowSelection={this.onRowSelection}
             >
@@ -77,7 +77,8 @@ class ToDoListTable extends PureComponent<Props, State> {
                     <TableRow>
                         {/* <TableHeaderColumn style={{ width: "10%" }}>ID</TableHeaderColumn> */}
                         <TableHeaderColumn style={{ width: "50%" }}> Name</TableHeaderColumn>
-                        <TableHeaderColumn style={{ width: "40%" }}> Created</TableHeaderColumn>
+                        <TableHeaderColumn style={{ width: "25%" }}> Created</TableHeaderColumn>
+                        <TableHeaderColumn style={{ width: "25%" }}> Updated</TableHeaderColumn>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -89,6 +90,7 @@ class ToDoListTable extends PureComponent<Props, State> {
                             {/* <TableRowColumn>{item.id}</TableRowColumn> */}
                             <TableRowColumn>{item.value}</TableRowColumn>
                             <TableRowColumn>{DateUtil.getLongDate(item.createdOn)}</TableRowColumn>
+                            <TableRowColumn>{DateUtil.getLongDate(item.updatedOn)}</TableRowColumn>
                         </TableRow>
                     )}
                 </TableBody>
