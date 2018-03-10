@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Component } from 'react';
 import NewItemForm from './NewItemForm';
 import ToDoListTable from './ToDoListTable';
-import ToDoItem from 'model/ToDoItem';
+import TaskItem from 'model/TaskItem';
 import SimpleDialog from 'util/SimpleDialog';
 
 import './ToDoListApp.css';
@@ -19,18 +19,18 @@ type Props = {
 type State = {
     resultDialog: { open: bool, title: string, message: string },
     textFieldValue: string,
-    values: ToDoItem[]
+    values: TaskItem[]
 };
 
 class ToDoListApp extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         const values = [
-            new ToDoItem(outputId(), "test01", new Date()),
-            new ToDoItem(outputId(), "test02", new Date())
+            new TaskItem(outputId(), "test01", new Date()),
+            new TaskItem(outputId(), "test02", new Date())
         ]
 
-        values.sort((a: ToDoItem, b: ToDoItem): number => {
+        values.sort((a: TaskItem, b: TaskItem): number => {
             if (a.id < b.id) return 1;
             if (a.id > b.id) return -1;
             return 0;
@@ -96,7 +96,7 @@ class ToDoListApp extends Component<Props, State> {
             this.openDialog("結果", msg)
         }
 
-        const item = new ToDoItem(outputId(), val, new Date());
+        const item = new TaskItem(outputId(), val, new Date());
 
         // ToDoListTableがPureComponentのため、その中で利用するvaluesが別のオブジェクトになるように工夫している
         const newItems = [item, ...this.state.values]
@@ -109,10 +109,10 @@ class ToDoListApp extends Component<Props, State> {
     }
 
     updateSelectedStatus(selectedRows: number[]) {
-        let newItems: ToDoItem[] = [];
+        let newItems: TaskItem[] = [];
 
         if (selectedRows === "all") {
-            this.state.values.forEach((element: ToDoItem, index: number) => {
+            this.state.values.forEach((element: TaskItem, index: number) => {
                 element.selected = true
                 newItems.push(element)
             })

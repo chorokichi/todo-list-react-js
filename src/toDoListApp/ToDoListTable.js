@@ -14,11 +14,11 @@ import {
 import FlatButton from 'material-ui/FlatButton';
 import { Card, CardHeader } from 'material-ui/Card' // テーブルがボードの上に載っているように表示するために利用
 import DateUtil from 'util/DateUtil';
-import ToDoItem from 'model/ToDoItem';
+import TaskItem from 'model/TaskItem';
 
 
 type Props = {
-    items: ToDoItem[],
+    items: TaskItem[],
     updateSelectedStatus: (selectedRows: number[]) => void
 };
 
