@@ -85,7 +85,7 @@ class ToDoListTable extends PureComponent<Props, State> {
                     {items.map((item) =>
                         <TableRow
                             key={item.id}
-                            selected={item.selected}
+                            selected={item.closed}
                         >
                             {/* <TableRowColumn>{item.id}</TableRowColumn> */}
                             <TableRowColumn>{item.value}</TableRowColumn>
