@@ -115,7 +115,7 @@ class ToDoListApp extends Component<Props, State> {
 
         if (selectedRows === "all") {
             this.state.values.forEach((element: TaskItem, index: number) => {
-                element.selected = true
+                element.closed = true
                 newItems.push(element)
             })
         } else {
@@ -126,14 +126,14 @@ class ToDoListApp extends Component<Props, State> {
                     if (item.selected) {
                         // すでに完了済みのため無視
                     } else {
-                        item.selected = true;
+                        item.closed = true;
                         item.updatedOn = new Date();
                     }
 
                     newItems.push(item);
                 } else {
                     if (item.selected) {
-                        item.selected = false;
+                        item.closed = false;
                         item.updatedOn = new Date();
                     } else {
                         // もともと未完了のため
