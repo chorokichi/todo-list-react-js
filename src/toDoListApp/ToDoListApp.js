@@ -25,10 +25,9 @@ type State = {
 class ToDoListApp extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        const now = new Date();
         const values = [
-            new TaskItem(outputId(), "test01", now, now),
-            new TaskItem(outputId(), "test02", now, now)
+            new TaskItem(outputId(), "test01", new Date()),
+            new TaskItem(outputId(), "test02", new Date())
         ]
 
         values.sort((a: TaskItem, b: TaskItem): number => {
@@ -97,8 +96,7 @@ class ToDoListApp extends Component<Props, State> {
             this.openDialog("結果", msg)
         }
 
-        const createdOn = new Date();
-        const item = new TaskItem(outputId(), val, createdOn, createdOn);
+        const item = new TaskItem(outputId(), val, new Date());
 
         // ToDoListTableがPureComponentのため、その中で利用するvaluesが別のオブジェクトになるように工夫している
         const newItems = [item, ...this.state.values]
@@ -110,12 +108,12 @@ class ToDoListApp extends Component<Props, State> {
         return true;
     }
 
-    updateSelectedStatus(selectedRows: number[] | 'all') {
+    updateSelectedStatus(selectedRows: number[]) {
         let newItems: TaskItem[] = [];
 
         if (selectedRows === "all") {
             this.state.values.forEach((element: TaskItem, index: number) => {
-                element.selected = true
+                element.closed = true
                 newItems.push(element)
             })
         } else {
@@ -126,14 +124,14 @@ class ToDoListApp extends Component<Props, State> {
                     if (item.selected) {
                         // すでに完了済みのため無視
                     } else {
-                        item.selected = true;
+                        item.closed = true;
                         item.updatedOn = new Date();
                     }
 
                     newItems.push(item);
                 } else {
                     if (item.selected) {
-                        item.selected = false;
+                        item.closed = false;
                         item.updatedOn = new Date();
                     } else {
                         // もともと未完了のため
