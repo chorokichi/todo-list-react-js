@@ -113,7 +113,7 @@ class ToDoListApp extends Component<Props, State> {
 
         if (selectedRows === "all") {
             this.state.values.forEach((element: TaskItem, index: number) => {
-                element.selected = true
+                element.closed = true
                 newItems.push(element)
             })
         } else {
@@ -121,10 +121,29 @@ class ToDoListApp extends Component<Props, State> {
                 console.log("i: " + i)
                 let item = this.state.values[i];
                 if (selectedRows.includes(i)) {
+<<<<<<< HEAD
                     item.selected = true
                     newItems.push(item);
                 } else {
                     item.selected = false
+=======
+                    if (item.selected) {
+                        // すでに完了済みのため無視
+                    } else {
+                        item.closed = true;
+                        item.updatedOn = new Date();
+                    }
+
+                    newItems.push(item);
+                } else {
+                    if (item.selected) {
+                        item.closed = false;
+                        item.updatedOn = new Date();
+                    } else {
+                        // もともと未完了のため
+                    }
+
+>>>>>>> 1ba4e7a0f29f583854f795181d56b56417d514cc
                     newItems.push(item);
                 }
             }
