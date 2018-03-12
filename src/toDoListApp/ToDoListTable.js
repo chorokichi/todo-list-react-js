@@ -1,8 +1,8 @@
 //@flow
 
 // TODO: 
-// Table(material-ui)+Reactで、どうやったらrowのcolumn=-1以外のところをクリックしたときに選択状態になるのを無効にできるか？
-
+// 1. Table(material-ui)+Reactで、どうやったらrowのcolumn=-1以外のところをクリックしたときに選択状態になるのを無効にできるか？
+// 2. Table内のtextFieldで、Enterもしくはフォーカスが外れたときだけ保存する処理を入れる(不正な値ならエラーがでればなおよし)。
 
 import * as React from 'react';
 import { PureComponent } from 'react';
@@ -14,6 +14,7 @@ import {
     TableRow,
     TableRowColumn,
 } from 'material-ui/Table';
+import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import { Card, CardHeader } from 'material-ui/Card' // テーブルがボードの上に載っているように表示するために利用
 import DateUtil from 'util/DateUtil';
@@ -29,6 +30,7 @@ type Props = {
     deleteSectedItems: () => void,
     deleteItem: (num: number) => void,
     updateBulkOperationMode: () => void,
+    onTextChange: (newValue: string, num: number) => void,
     selectable: bool,
 };
 
@@ -141,7 +143,26 @@ class ToDoListTable extends PureComponent<Props, State> {
 
                         >
                             {/* <TableRowColumn>{item.id}</TableRowColumn> */}
-                            <TableRowColumn>{item.value}</TableRowColumn>
+                            <TableRowColumn>
+                                <TextField
+                                    id={item.id}
+                                    defaultValue={item.value}
+                                    onKeyPress={(event: KeyboardEventHandler) => {
+                                        const ENTER = 13 // Enter Key Code
+                                        const keyNum = event.which;
+                                        console.log("event: " + keyNum);
+                                        if (ENTER === keyNum) {
+                                            const newValue = event.currentTarget.value
+                                            this.props.onTextChange(newValue, num);
+                                        }
+                                    }}
+                                    onBlur={(event: FocusEventHandler) => {
+                                        const newValue = event.currentTarget.value
+                                        console.error("onBlur - " + newValue);
+                                        console.table(item);
+                                        this.props.onTextChange(newValue, num);
+                                    }} />
+                            </TableRowColumn>
                             <TableRowColumn>{DateUtil.getLongDate(item.createdOn)}</TableRowColumn>
                             <TableRowColumn>{DateUtil.getLongDate(item.updatedOn)}</TableRowColumn>
                             <TableRowColumn>

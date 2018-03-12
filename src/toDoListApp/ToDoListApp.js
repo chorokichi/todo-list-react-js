@@ -54,6 +54,7 @@ class ToDoListApp extends Component<Props, State> {
         (this: any).deleteSectedItems = this.deleteSectedItems.bind(this);
         (this: any).deleteItem = this.deleteItem.bind(this);
         (this: any).updateBulkOperationMode = this.updateBulkOperationMode.bind(this);
+        (this: any)._onTextChange = this._onTextChange.bind(this);
     }
 
     componentDidMount() {
@@ -185,6 +186,30 @@ class ToDoListApp extends Component<Props, State> {
         })
     }
 
+    /**
+     * 一文字ずつではなく確定したときに呼ばれるメソッド
+     * @param {*} newValue 
+     * @param {*} num 
+     */
+    _onTextChange(newValue: string, num: number) {
+        const newItems: TaskItem[] = [];
+        for (var i = 0; i < this.state.values.length; i++) {
+            let item = this.state.values[i];
+            if (i === num) {
+                if (item.value === newValue) {
+                    // 完全一致なら再描画の必要がないため無視する
+                    console.log("編集なし")
+                    return
+                }
+                item.value = newValue;
+            }
+            newItems.push(item);
+        }
+        this.setState({
+            values: newItems
+        });
+    }
+
     render() {
         console.log("ToDoListApp is rendering...")
         return (
@@ -200,6 +225,7 @@ class ToDoListApp extends Component<Props, State> {
                     updateSelectedStatus={this.updateSelectedStatus}
                     deleteSectedItems={this.deleteSectedItems}
                     updateBulkOperationMode={this.updateBulkOperationMode}
+                    onTextChange={this._onTextChange}
                     deleteItem={this.deleteItem}
                     selectable={this.state.tableSelectable}
                 />
