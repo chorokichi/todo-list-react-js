@@ -202,6 +202,7 @@ class ToDoListApp extends Component<Props, State> {
                     return
                 }
                 item.value = newValue;
+                item.updatedOn = new Date()
             }
             newItems.push(item);
         }
