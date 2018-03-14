@@ -19,14 +19,14 @@ class Type {
         this.type = type;
     }
 }
-const DialogType = () => {
+const DialogType = (() => {
     return {
-        Confirmation: new Type("Add"),
+        Confirmation: new Type("Confirmation"),
         Add: new Type("Add"),
         Delete: new Type("Delete"),
         MultiDelete: new Type("MultiDelete")
     }
-}
+})()
 
 
 type Props = {
@@ -40,6 +40,9 @@ type State = {
 };
 
 class ToDoListApp extends Component<Props, State> {
+
+    selectedNum: number = -1;
+
     constructor(props: Props) {
         super(props);
         const now = new Date();
@@ -47,6 +50,10 @@ class ToDoListApp extends Component<Props, State> {
             new TaskItem(outputId(), "test01", now, now),
             new TaskItem(outputId(), "test02", now, now)
         ]
+
+        for (var i = 0; i < 100; i++) {
+            values.push(new TaskItem(outputId(), "auto" + i, now, now));
+        }
 
         values.sort((a: TaskItem, b: TaskItem): number => {
             if (a.id < b.id) return 1;
@@ -65,14 +72,19 @@ class ToDoListApp extends Component<Props, State> {
             values: values,
             tableSelectable: false
         };
-        (this: any).onUpdateTextBox = this.onUpdateTextBox.bind(this);
-        (this: any).onSubmit = this.onSubmit.bind(this);
-        (this: any).updateSelectedStatus = this.updateSelectedStatus.bind(this);
+
+
+        console.log("DialogType.Confirmation: " + String(DialogType.Confirmation.type));
+
+        (this: any)._onUpdateTextBox = this._onUpdateTextBox.bind(this);
+        (this: any)._onSubmit = this._onSubmit.bind(this);
+        (this: any)._updateSelectedStatus = this._updateSelectedStatus.bind(this);
         (this: any)._deleteSectedItems = this._deleteSectedItems.bind(this);
-        (this: any).deleteItem = this.deleteItem.bind(this);
-        (this: any).updateBulkOperationMode = this.updateBulkOperationMode.bind(this);
+        (this: any)._deleteItem = this._deleteItem.bind(this);
+        (this: any)._updateBulkOperationMode = this._updateBulkOperationMode.bind(this);
         (this: any)._onTextChange = this._onTextChange.bind(this);
         (this: any)._closeDialog = this._closeDialog.bind(this);
+
     }
 
     componentDidMount() {
@@ -83,7 +95,7 @@ class ToDoListApp extends Component<Props, State> {
 
     }
 
-    onUpdateTextBox(value: string) {
+    _onUpdateTextBox(value: string) {
         console.log("test - " + value)
         this.setState({
             textFieldValue: value
@@ -91,6 +103,7 @@ class ToDoListApp extends Component<Props, State> {
     }
 
     openDialog(title: string, msg: string, type: Type) {
+        console.log(`Open Dialog: ${title}/${msg} [${String(type)}]`)
         this.setState({
             resultDialog: {
                 open: true,
@@ -102,10 +115,13 @@ class ToDoListApp extends Component<Props, State> {
     }
 
     _closeDialog(isCancel: bool) {
-
+        console.log("_closeDialog: " + String(isCancel));
         if (!isCancel) {
             if (this.state.resultDialog.type === DialogType.MultiDelete) {
-                this.deleteSectedItems()
+                this.deleteSectedItems();
+            }
+            else if (this.state.resultDialog.type === DialogType.Delete) {
+                this.deleteItem();
             }
         }
         this.setState({
@@ -115,7 +131,7 @@ class ToDoListApp extends Component<Props, State> {
         })
     }
 
-    onSubmit() {
+    _onSubmit() {
         const val = this.state.textFieldValue.trim();
         if (val === "") {
             alert("未入力です。");
@@ -141,7 +157,7 @@ class ToDoListApp extends Component<Props, State> {
         return true;
     }
 
-    updateSelectedStatus(selectedRows: number[] | 'all') {
+    _updateSelectedStatus(selectedRows: number[] | 'all') {
         const newItems: TaskItem[] = [];
         if (selectedRows === "all") {
             this.state.values.forEach((element: TaskItem, index: number) => {
@@ -188,7 +204,14 @@ class ToDoListApp extends Component<Props, State> {
         })
     }
 
-    deleteItem(num: number) {
+    _deleteItem(num: number) {
+        console.log(`_deleteItem:${num}`);
+        this.selectedNum = num;
+        this.openDialog("確認", `このタスク「${this.state.values[num].value}」を削除してもよろしいですか？`, DialogType.Delete);
+    }
+
+    deleteItem() {
+        const num = this.selectedNum;
         console.log(`deleteItem(${num}): ${String(this.state.values[num])}`);
         console.info("Before: ")
         const newItems: TaskItem[] = [];
@@ -206,7 +229,7 @@ class ToDoListApp extends Component<Props, State> {
         })
     }
 
-    updateBulkOperationMode() {
+    _updateBulkOperationMode() {
         console.log(`enableBulkOperationMode: ${String(this.state.tableSelectable)} -> ${String(this.state.tableSelectable)}`);
         this.setState((prevState: State, prevProps: Props) => {
             return ({
@@ -246,17 +269,17 @@ class ToDoListApp extends Component<Props, State> {
             <div className="ToDoListApp">
                 <NewItemForm
                     value={this.state.textFieldValue}
-                    onTextChange={this.onUpdateTextBox}
-                    onSubmit={this.onSubmit}
+                    onTextChange={this._onUpdateTextBox}
+                    onSubmit={this._onSubmit}
                 />
 
                 <ToDoListTable
                     items={this.state.values}
-                    updateSelectedStatus={this.updateSelectedStatus}
+                    updateSelectedStatus={this._updateSelectedStatus}
                     deleteSectedItems={this._deleteSectedItems}
-                    updateBulkOperationMode={this.updateBulkOperationMode}
+                    updateBulkOperationMode={this._updateBulkOperationMode}
                     onTextChange={this._onTextChange}
-                    deleteItem={this.deleteItem}
+                    deleteItem={this._deleteItem}
                     selectable={this.state.tableSelectable}
                 />
 
