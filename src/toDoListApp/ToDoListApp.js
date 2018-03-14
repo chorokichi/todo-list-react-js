@@ -13,14 +13,30 @@ const outputId = (): string => {
     return String(('0000' + count++).slice(-4));
 }
 
+class Type {
+    type: string;
+    constructor(type: string) {
+        this.type = type;
+    }
+}
+const DialogType = () => {
+    return {
+        Confirmation: new Type("Add"),
+        Add: new Type("Add"),
+        Delete: new Type("Delete"),
+        MultiDelete: new Type("MultiDelete")
+    }
+}
+
+
 type Props = {
 };
 
 type State = {
-    resultDialog: { open: bool, title: string, message: string },
+    resultDialog: { open: bool, title: string, message: string, type: Type },
     textFieldValue: string,
     values: TaskItem[],
-    tableSelectable: bool,
+    tableSelectable: bool
 };
 
 class ToDoListApp extends Component<Props, State> {
@@ -42,7 +58,8 @@ class ToDoListApp extends Component<Props, State> {
             resultDialog: {
                 open: false,
                 title: "",
-                message: ""
+                message: "",
+                type: DialogType.Confirmation
             },
             textFieldValue: "",
             values: values,
@@ -51,10 +68,11 @@ class ToDoListApp extends Component<Props, State> {
         (this: any).onUpdateTextBox = this.onUpdateTextBox.bind(this);
         (this: any).onSubmit = this.onSubmit.bind(this);
         (this: any).updateSelectedStatus = this.updateSelectedStatus.bind(this);
-        (this: any).deleteSectedItems = this.deleteSectedItems.bind(this);
+        (this: any)._deleteSectedItems = this._deleteSectedItems.bind(this);
         (this: any).deleteItem = this.deleteItem.bind(this);
         (this: any).updateBulkOperationMode = this.updateBulkOperationMode.bind(this);
         (this: any)._onTextChange = this._onTextChange.bind(this);
+        (this: any)._closeDialog = this._closeDialog.bind(this);
     }
 
     componentDidMount() {
@@ -72,20 +90,27 @@ class ToDoListApp extends Component<Props, State> {
         });
     }
 
-    openDialog(title: string, msg: string) {
+    openDialog(title: string, msg: string, type: Type) {
         this.setState({
             resultDialog: {
                 open: true,
                 title: title,
-                message: msg
+                message: msg,
+                type: type
             }
         })
     }
 
-    closeDialog() {
+    _closeDialog(isCancel: bool) {
+
+        if (!isCancel) {
+            if (this.state.resultDialog.type === DialogType.MultiDelete) {
+                this.deleteSectedItems()
+            }
+        }
         this.setState({
             resultDialog: {
-                open: false, title: "", message: ""
+                open: false, title: "", message: "", type: DialogType.Confirmation
             }
         })
     }
@@ -100,7 +125,7 @@ class ToDoListApp extends Component<Props, State> {
         {
             const msg = "「" + val + "」を保存しました";
             console.log(msg)
-            this.openDialog("結果", msg)
+            this.openDialog("結果", msg, DialogType.Confirmation)
         }
 
         const createdOn = new Date();
@@ -144,8 +169,12 @@ class ToDoListApp extends Component<Props, State> {
         })
     }
 
+    _deleteSectedItems() {
+        console.log("_deleteSectedItems");
+        this.openDialog("結果", "選択したタスクを削除してもよろしいですか？", DialogType.MultiDelete);
+    }
+
     deleteSectedItems() {
-        console.log("deleteSectedItems");
         this.setState((preState: State, preProps: Props) => {
             let items = preState.values;
             items = items.filter(function (item) {
@@ -224,7 +253,7 @@ class ToDoListApp extends Component<Props, State> {
                 <ToDoListTable
                     items={this.state.values}
                     updateSelectedStatus={this.updateSelectedStatus}
-                    deleteSectedItems={this.deleteSectedItems}
+                    deleteSectedItems={this._deleteSectedItems}
                     updateBulkOperationMode={this.updateBulkOperationMode}
                     onTextChange={this._onTextChange}
                     deleteItem={this.deleteItem}
@@ -237,11 +266,11 @@ class ToDoListApp extends Component<Props, State> {
                     open={this.state.resultDialog.open}
                     onClickOK={() => {
                         console.log("OK!")
-                        this.closeDialog();
+                        this._closeDialog(false);
                     }}
                     onClickCancel={() => {
                         console.log("Cancel!");
-                        this.closeDialog();
+                        this._closeDialog(true);
                     }}
                 />
             </div >
