@@ -1,6 +1,6 @@
 //@flow
 import * as React from 'react';
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import NewItemForm from './NewItemForm';
 import ToDoListTable from './ToDoListTable';
 import TaskItem from 'model/TaskItem';
@@ -39,7 +39,7 @@ type State = {
     tableSelectable: bool
 };
 
-class ToDoListApp extends Component<Props, State> {
+class ToDoListApp extends PureComponent<Props, State> {
 
     selectedNum: number = -1;
 
